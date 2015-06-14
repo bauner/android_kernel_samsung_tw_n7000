@@ -23,6 +23,7 @@ config IOSCHED_DEADLINE
 
 config IOSCHED_ROW
 	tristate "ROW I/O scheduler"
+	default y
 	---help---
 	   The ROW I/O scheduler gives priority to READ requests over the
 	   WRITE requests when dispatching, without starving WRITE requests.
@@ -55,7 +56,7 @@ config CFQ_GROUP_IOSCHED
 
 choice
 	prompt "Default I/O scheduler"
-	default DEFAULT_CFQ
+	default DEFAULT_ROW
 	help
 	  Select the I/O scheduler which will be used by default for all
 	  block devices.
