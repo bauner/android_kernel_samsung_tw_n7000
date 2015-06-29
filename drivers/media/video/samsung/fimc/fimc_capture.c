@@ -203,6 +203,9 @@ static const struct v4l2_queryctrl fimc_controls[] = {
 		.default_value = 0,
 	},
 };
+#ifdef CONFIG_MACH_GC1
+static bool leave_power;
+#endif
 
 #ifndef CONFIG_VIDEO_FIMC_MIPI
 void s3c_csis_start(int csis_id, int lanes, int settle, \
@@ -268,7 +271,12 @@ static int fimc_init_camera(struct fimc_control *ctrl)
 
 retry:
 	/* set rate for mclk */
+#ifndef CONFIG_MACH_GC1
 	if ((clk_get_rate(cam->clk)) && (fimc->mclk_status == CAM_MCLK_OFF)) {
+#else
+	if ((clk_get_rate(cam->clk)) && (fimc->mclk_status == CAM_MCLK_OFF)
+		&& !leave_power) {
+#endif
 		clk_set_rate(cam->clk, cam->clk_rate);
 		clk_enable(cam->clk);
 		fimc->mclk_status = CAM_MCLK_ON;
@@ -277,7 +285,14 @@ retry:
 
 	/* enable camera power if needed */
 	if (cam->cam_power) {
+#ifndef CONFIG_MACH_GC1
 		ret = cam->cam_power(1);
+#else
+		if (!leave_power)
+			ret = cam->cam_power(1);
+
+		leave_power = false;
+#endif
 		if (unlikely(ret < 0)) {
 			fimc_err("\nfail to power on\n");
 			if (fimc->mclk_status == CAM_MCLK_ON) {
@@ -722,11 +737,19 @@ int fimc_release_subdev(struct fimc_control *ctrl)
 		client = v4l2_get_subdevdata(ctrl->cam->sd);
 		i2c_unregister_device(client);
 		ctrl->cam->sd = NULL;
+#ifndef CONFIG_MACH_GC1
 		if (ctrl->cam->cam_power)
+#else
+		if (ctrl->cam->cam_power && !leave_power)
+#endif
 			ctrl->cam->cam_power(0);
 
 		/* shutdown the MCLK */
+#ifndef CONFIG_MACH_GC1
 		if (fimc->mclk_status == CAM_MCLK_ON) {
+#else
+		if (fimc->mclk_status == CAM_MCLK_ON && !leave_power) {
+#endif
 			clk_disable(ctrl->cam->clk);
 			fimc->mclk_status = CAM_MCLK_OFF;
 		}
@@ -795,7 +818,6 @@ static int fimc_configure_subdev(struct fimc_control *ctrl)
 	if (!sd) {
 		fimc_err("%s: v4l2 subdev board registering failed\n",
 				__func__);
-		return -ENODEV;
 	}
 	/* Assign subdev to proper camera device pointer */
 	ctrl->cam->sd = sd;
@@ -2177,6 +2199,11 @@ int fimc_s_ctrl_capture(void *fh, struct v4l2_control *c)
 
 	switch (c->id) {
 #ifdef CONFIG_MACH_GC1
+	case V4L2_CID_CAMERA_HOLD_LENS:
+		leave_power = true;
+		ret = v4l2_subdev_call(ctrl->cam->sd, core, s_ctrl, c);
+		break;
+
 	case V4L2_CID_CAM_UPDATE_FW:
 		if (c->value == FW_MODE_UPDATE || c->value == FW_MODE_DUMP) {
 			if (fimc->mclk_status == CAM_MCLK_ON) {
