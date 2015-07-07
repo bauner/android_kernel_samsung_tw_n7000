@@ -1496,7 +1496,7 @@ static int sec_bat_enable_charging_main(struct sec_bat_info *info, bool enable)
 		switch (info->cable_type) {
 		case CABLE_TYPE_USB:
 			val_type.intval = POWER_SUPPLY_STATUS_CHARGING;
-			val_chg_current.intval = 450;	/* mA */
+			val_chg_current.intval = 550;	/* mA */
 			break;
 		case CABLE_TYPE_AC:
 			val_type.intval = POWER_SUPPLY_STATUS_CHARGING;
@@ -1504,7 +1504,7 @@ static int sec_bat_enable_charging_main(struct sec_bat_info *info, bool enable)
 			break;
 		case CABLE_TYPE_MISC:
 			val_type.intval = POWER_SUPPLY_STATUS_CHARGING;
-			val_chg_current.intval = 450;	/* mA */
+			val_chg_current.intval = 550;	/* mA */
 			break;
 		default:
 			dev_err(info->dev, "%s: Invalid func use\n", __func__);
@@ -1585,7 +1585,7 @@ static int sec_bat_enable_charging_sub(struct sec_bat_info *info, bool enable)
 			switch (info->cable_type) {
 			case CABLE_TYPE_USB:
 				val_type.intval = POWER_SUPPLY_STATUS_CHARGING;
-				val_chg_current.intval = 450;	/* mA */
+				val_chg_current.intval = 550;	/* mA */
 				break;
 			case CABLE_TYPE_AC:
 				val_type.intval = POWER_SUPPLY_STATUS_CHARGING;
@@ -1600,7 +1600,7 @@ static int sec_bat_enable_charging_sub(struct sec_bat_info *info, bool enable)
 				break;
 			case CABLE_TYPE_MISC:
 				val_type.intval = POWER_SUPPLY_STATUS_CHARGING;
-				val_chg_current.intval = 450;	/* mA */
+				val_chg_current.intval = 550;	/* mA */
 				break;
 			default:
 				dev_err(info->dev, "%s: Invalid func use\n",
@@ -2810,7 +2810,7 @@ static ssize_t sec_bat_store(struct device *dev,
 					switch (info->cable_type) {
 					case CABLE_TYPE_USB:
 					case CABLE_TYPE_MISC:
-						value.intval = 450;	/* mA */
+						value.intval = 550;	/* mA */
 						break;
 					case CABLE_TYPE_AC:
 						value.intval = 650;	/* mA */
