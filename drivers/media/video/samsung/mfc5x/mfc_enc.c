@@ -16,9 +16,6 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 
-#if defined(CONFIG_BUSFREQ) || defined(CONFIG_EXYNOS4_CPUFREQ)
-#include <mach/cpufreq.h>
-#endif
 #include <mach/regs-mfc.h>
 
 #include "mfc_enc.h"
@@ -1532,51 +1529,7 @@ int mfc_init_encoding(struct mfc_inst_ctx *ctx, union mfc_args *args)
 		mfc_mem_cache_inv(in_vir, init_arg->cmn.out_header_size);
 		mfc_dbg("cache invalidate\n");
 	}
-#if defined(CONFIG_BUSFREQ)
-	/* Fix MFC & Bus Frequency for High resolution for better performance */
-	if (ctx->width >= MAX_HOR_RES || ctx->height >= MAX_VER_RES) {
-		if (atomic_read(&ctx->dev->busfreq_lock_cnt) == 0) {
-			/* For fixed MFC & Bus Freq to 200 & 400 MHz for 1080p Contents */
-			exynos4_busfreq_lock(DVFS_LOCK_ID_MFC, BUS_L0);
-			mfc_dbg("[%s] Bus Freq Locked L0\n", __func__);
-		}
 
-		atomic_inc(&ctx->dev->busfreq_lock_cnt);
-		ctx->busfreq_flag = true;
-	}
-#endif
-
-#if defined(CONFIG_MACH_GC1) && defined(CONFIG_EXYNOS4_CPUFREQ)
-	if ((ctx->width >= 1280 && ctx->height >= 720)
-		|| (ctx->width >= 720 && ctx->height >= 1280)) {
-		if (atomic_read(&ctx->dev->cpufreq_lock_cnt) == 0) {
-			if (0 == ctx->dev->cpufreq_level) /* 800MHz */
-				exynos_cpufreq_get_level(800000,
-						&ctx->dev->cpufreq_level);
-			exynos_cpufreq_lock(DVFS_LOCK_ID_MFC,
-					ctx->dev->cpufreq_level);
-			mfc_dbg("[%s] CPU Freq Locked 800MHz!\n", __func__);
-		}
-		atomic_inc(&ctx->dev->cpufreq_lock_cnt);
-		ctx->cpufreq_flag = true;
-	}
-#endif
-
-#if defined(CONFIG_CPU_EXYNOS4210) && defined(CONFIG_EXYNOS4_CPUFREQ)
-	if ((ctx->width >= 320 && ctx->height >= 240)
-		|| (ctx->width >= 240 && ctx->height >= 320)) {
-		if (atomic_read(&ctx->dev->cpufreq_lock_cnt) == 0) {
-			if (0 == ctx->dev->cpufreq_level) /* 500MHz */
-				exynos_cpufreq_get_level(500000,
-						&ctx->dev->cpufreq_level);
-			exynos_cpufreq_lock(DVFS_LOCK_ID_MFC,
-					ctx->dev->cpufreq_level);
-			mfc_dbg("[%s] CPU Freq Locked 500MHz!\n", __func__);
-		}
-		atomic_inc(&ctx->dev->cpufreq_lock_cnt);
-		ctx->cpufreq_flag = true;
-	}
-#endif
 
 	/*
 	 * allocate & set DPBs

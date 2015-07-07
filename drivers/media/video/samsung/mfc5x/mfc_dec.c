@@ -16,15 +16,6 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 
-#ifdef CONFIG_BUSFREQ_OPP
-#include <plat/cpu.h>
-#include <mach/busfreq_exynos4.h>
-#define HD_MOVIE_SIZE_MULTIPLY_WIDTH_HEIGHT (1281*721)
-#endif
-
-#if defined(CONFIG_BUSFREQ) || defined(CONFIG_EXYNOS4_CPUFREQ)
-#include <mach/cpufreq.h>
-#endif
 #include <mach/regs-mfc.h>
 
 #include "mfc_dec.h"
@@ -1881,78 +1872,6 @@ int mfc_init_decoding(struct mfc_inst_ctx *ctx, union mfc_args *args)
 	mfc_dbg("H: %d, W: %d, DPB_Count: %d", ctx->width, ctx->height,
 		dec_ctx->numtotaldpb);
 
-#if defined(CONFIG_BUSFREQ)
-	/* Lock MFC & Bus FREQ for high resolution */
-	if (ctx->width >= MAX_HOR_RES || ctx->height >= MAX_VER_RES) {
-		if (atomic_read(&ctx->dev->busfreq_lock_cnt) == 0) {
-			exynos4_busfreq_lock(DVFS_LOCK_ID_MFC, BUS_L0);
-			mfc_dbg("Bus FREQ locked to L0\n");
-		}
-
-		atomic_inc(&ctx->dev->busfreq_lock_cnt);
-		ctx->busfreq_flag = true;
-	} else {
-#if defined(CONFIG_CPU_EXYNOS4210)
-		/* Fix MFC & Bus Frequency for better performance */
-		if (atomic_read(&ctx->dev->busfreq_lock_cnt) == 0) {
-			exynos4_busfreq_lock(DVFS_LOCK_ID_MFC, BUS_L1);
-			mfc_dbg("Bus FREQ locked to L1\n");
-		}
-		atomic_inc(&ctx->dev->busfreq_lock_cnt);
-		ctx->busfreq_flag = true;
-#endif
-	}
-#endif
-
-#if defined(CONFIG_MACH_GC1) && defined(CONFIG_EXYNOS4_CPUFREQ)
-	if ((ctx->width >= 1280 && ctx->height >= 720)
-		|| (ctx->width >= 720 && ctx->height >= 1280)) {
-		if (atomic_read(&ctx->dev->cpufreq_lock_cnt) == 0) {
-			if (0 == ctx->dev->cpufreq_level) /* 800MHz */
-				exynos_cpufreq_get_level(800000, &ctx->dev->cpufreq_level);
-			exynos_cpufreq_lock(DVFS_LOCK_ID_MFC, ctx->dev->cpufreq_level);
-			mfc_dbg("[%s] CPU Freq Locked 800MHz!\n", __func__);
-		}
-		atomic_inc(&ctx->dev->cpufreq_lock_cnt);
-		ctx->cpufreq_flag = true;
-	}
-#endif
-
-#if defined(CONFIG_CPU_EXYNOS4210) && defined(CONFIG_EXYNOS4_CPUFREQ)
-	if ((ctx->width >= 1280 && ctx->height >= 720)
-		|| (ctx->width >= 720 && ctx->height >= 1280)) {
-		if (atomic_read(&ctx->dev->cpufreq_lock_cnt) == 0) {
-			if (0 == ctx->dev->cpufreq_level) /* 500MHz */
-				exynos_cpufreq_get_level(500000, &ctx->dev->cpufreq_level);
-			exynos_cpufreq_lock(DVFS_LOCK_ID_MFC, ctx->dev->cpufreq_level);
-			mfc_dbg("[%s] CPU Freq Locked 500MHz!\n", __func__);
-		}
-		atomic_inc(&ctx->dev->cpufreq_lock_cnt);
-		ctx->cpufreq_flag = true;
-	}
-#endif
-
-#ifdef CONFIG_BUSFREQ_OPP
-	if (atomic_read(&ctx->dev->dmcthreshold_lock_cnt) == 0) {
-		mfc_info("Implement set dmc_max_threshold\n");
-		if (soc_is_exynos4212()) {
-			dmc_max_threshold =
-				EXYNOS4212_DMC_MAX_THRESHOLD + 20;
-		} else if (soc_is_exynos4412()) {
-			if (samsung_rev() >= EXYNOS4412_REV_2_0)
-				dmc_max_threshold =
-					PRIME_DMC_MAX_THRESHOLD + 20;
-			else
-				dmc_max_threshold =
-					EXYNOS4412_DMC_MAX_THRESHOLD + 20;
-		} else {
-			pr_err("Unsupported model.\n");
-			return -EINVAL;
-		}
-	}
-	atomic_inc(&ctx->dev->dmcthreshold_lock_cnt);
-	ctx->dmcthreshold_flag = true;
-#endif
 	/*
 	 * allocate & set codec buffers
 	 */
@@ -2002,18 +1921,6 @@ err_dpbs_set:
 	mfc_free_buf_type(ctx->id, MBT_CODEC);
 
 err_codec_bufs:
-#if defined(CONFIG_BUSFREQ)
-	/* Release MFC & Bus Frequency lock for High resolution */
-	if (ctx->busfreq_flag == true) {
-		atomic_dec(&ctx->dev->busfreq_lock_cnt);
-		ctx->busfreq_flag = false;
-
-		if (atomic_read(&ctx->dev->busfreq_lock_cnt) == 0) {
-			exynos4_busfreq_lock_free(DVFS_LOCK_ID_MFC);
-			mfc_dbg("Bus FREQ released\n");
-		}
-	}
-#endif
 
 err_set_arg:
 err_chk_res:
