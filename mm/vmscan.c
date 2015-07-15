@@ -724,7 +724,7 @@ static enum page_references page_check_references(struct page *page,
 		SetPageReferenced(page);
 
 #ifndef CONFIG_DMA_CMA
-		if (referenced_page)
+		if (referenced_page || referenced_ptes > 1)
 			return PAGEREF_ACTIVATE;
 #else
 		if (referenced_page || referenced_ptes > 1)
