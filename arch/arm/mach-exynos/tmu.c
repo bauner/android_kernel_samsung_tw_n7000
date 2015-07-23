@@ -1354,7 +1354,6 @@ static int s5p_tmu_suspend(struct platform_device *pdev, pm_message_t state)
 					+ EXYNOS4x12_TMU_TRESHOLD_TEMP_FALL);
 #endif
 	}
-	disable_irq(info->irq);
 
 	return 0;
 }
