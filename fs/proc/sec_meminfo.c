@@ -111,10 +111,10 @@ static int sec_meminfo_proc_show(struct seq_file *m, void *v)
 		+DIV_ROUND_UP(((_edata) - (_sdata)), SZ_1K) \
 		+DIV_ROUND_UP(((__bss_stop) - (__bss_start)), SZ_1K);
 
-#ifdef CONFIG_VIDEO_MALI400MP
+#ifdef CONFIG_MALI400_UMP
 	ktotal += (sec_meminfo_get_alloc_low_cnt(MALI_TYPE)*4);
 #endif
-#ifdef CONFIG_VIDEO_UMP
+#ifdef CONFIG_MALI400_UMP
 	ktotal += (sec_meminfo_get_alloc_low_cnt(UMP_TYPE)*4);
 #endif
 
@@ -122,10 +122,10 @@ static int sec_meminfo_proc_show(struct seq_file *m, void *v)
 		+(zone_page_state(h_zone, NR_ANON_PAGES)*4) \
 		+((vmi.total_page_cnt-vmi.low_page_cnt)*4);
 
-#ifdef CONFIG_VIDEO_MALI400MP
+#ifdef CONFIG_MALI400_UMP
 	htotal += ((sec_meminfo_get_alloc_total_cnt(MALI_TYPE) - sec_meminfo_get_alloc_low_cnt(MALI_TYPE))*4);
 #endif
-#ifdef CONFIG_VIDEO_UMP
+#ifdef CONFIG_MALI400_UMP
 	htotal += ((sec_meminfo_get_alloc_total_cnt(UMP_TYPE) - sec_meminfo_get_alloc_low_cnt(UMP_TYPE))*4);
 #endif
 
@@ -154,10 +154,10 @@ static int sec_meminfo_proc_show(struct seq_file *m, void *v)
 		".text:		%8d kB\n"
 		".data:		%8d kB\n"
 		".bss:		%8d kB\n"
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		"Mali:		%8d kB\n"
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		"UMP:		%8d kB\n"
 	#endif
 		"\n"
@@ -175,10 +175,10 @@ static int sec_meminfo_proc_show(struct seq_file *m, void *v)
 		"-Active:	%8lu kB\n"
 		"-Inactive:	%8lu kB\n"
 		"Vmalloc:	%8lu kB\n"
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		"Mali:		%8d kB\n"
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		"UMP:		%8d kB\n\n"
 	#endif
 		,
@@ -207,10 +207,10 @@ static int sec_meminfo_proc_show(struct seq_file *m, void *v)
 		DIV_ROUND_UP(((_etext) - (_text)), SZ_1K),
 		DIV_ROUND_UP(((_edata) - (_sdata)), SZ_1K),
 		DIV_ROUND_UP(((__bss_stop) - (__bss_start)), SZ_1K),
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		(sec_meminfo_get_alloc_low_cnt(MALI_TYPE)*4),
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		(sec_meminfo_get_alloc_low_cnt(UMP_TYPE)*4),
 	#endif
 		K(i.totalhigh),
@@ -227,10 +227,10 @@ static int sec_meminfo_proc_show(struct seq_file *m, void *v)
 		zone_page_state(h_zone, NR_ACTIVE_ANON)*4,
 		zone_page_state(h_zone, NR_INACTIVE_ANON)*4,
 		(vmi.total_page_cnt-vmi.low_page_cnt)*4
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		, ((sec_meminfo_get_alloc_total_cnt(MALI_TYPE) - sec_meminfo_get_alloc_low_cnt(MALI_TYPE))*4),
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		((sec_meminfo_get_alloc_total_cnt(UMP_TYPE) - sec_meminfo_get_alloc_low_cnt(UMP_TYPE))*4)
 	#endif
 		);
@@ -287,10 +287,10 @@ void sec_meminfo_print(void)
 		+DIV_ROUND_UP(((_edata) - (_sdata)), SZ_1K) \
 		+DIV_ROUND_UP(((__bss_stop) - (__bss_start)), SZ_1K);
 
-#ifdef CONFIG_VIDEO_MALI400MP
+#ifdef CONFIG_MALI400_UMP
 	ktotal += (sec_meminfo_get_alloc_low_cnt(MALI_TYPE)*4);
 #endif
-#ifdef CONFIG_VIDEO_UMP
+#ifdef CONFIG_MALI400_UMP
 	ktotal += (sec_meminfo_get_alloc_low_cnt(UMP_TYPE)*4);
 #endif
 
@@ -298,10 +298,10 @@ void sec_meminfo_print(void)
 		+(zone_page_state(h_zone, NR_ANON_PAGES)*4) \
 		+((vmi.total_page_cnt-vmi.low_page_cnt)*4);
 
-#ifdef CONFIG_VIDEO_MALI400MP
+#ifdef CONFIG_MALI400_UMP
 	htotal += ((sec_meminfo_get_alloc_total_cnt(MALI_TYPE) - sec_meminfo_get_alloc_low_cnt(MALI_TYPE))*4);
 #endif
-#ifdef CONFIG_VIDEO_UMP
+#ifdef CONFIG_MALI400_UMP
 	htotal += ((sec_meminfo_get_alloc_total_cnt(UMP_TYPE) - sec_meminfo_get_alloc_low_cnt(UMP_TYPE))*4);
 #endif
 
@@ -331,10 +331,10 @@ void sec_meminfo_print(void)
 		".text:		%8d kB\n"
 		".data:		%8d kB\n"
 		".bss:		%8d kB\n"
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		"Mali:		%8d kB\n"
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		"UMP:		%8d kB\n"
 	#endif
 		"\n"
@@ -352,10 +352,10 @@ void sec_meminfo_print(void)
 		"-Active:	%8lu kB\n"
 		"-Inactive:	%8lu kB\n"
 		"Vmalloc:	%8lu kB\n"
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		"Mali:		%8d kB\n"
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		"UMP:		%8d kB\n\n"
 	#endif
 		,
@@ -384,10 +384,10 @@ void sec_meminfo_print(void)
 		DIV_ROUND_UP(((_etext) - (_text)), SZ_1K),
 		DIV_ROUND_UP(((_edata) - (_sdata)), SZ_1K),
 		DIV_ROUND_UP(((__bss_stop) - (__bss_start)), SZ_1K),
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		(sec_meminfo_get_alloc_low_cnt(MALI_TYPE)*4),
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		(sec_meminfo_get_alloc_low_cnt(UMP_TYPE)*4),
 	#endif
 		K(i.totalhigh),
@@ -404,10 +404,10 @@ void sec_meminfo_print(void)
 		zone_page_state(h_zone, NR_ACTIVE_ANON)*4,
 		zone_page_state(h_zone, NR_INACTIVE_ANON)*4,
 		(vmi.total_page_cnt-vmi.low_page_cnt)*4
-	#ifdef CONFIG_VIDEO_MALI400MP
+	#ifdef CONFIG_MALI400_UMP
 		, ((sec_meminfo_get_alloc_total_cnt(MALI_TYPE) - sec_meminfo_get_alloc_low_cnt(MALI_TYPE))*4),
 	#endif
-	#ifdef CONFIG_VIDEO_UMP
+	#ifdef CONFIG_MALI400_UMP
 		((sec_meminfo_get_alloc_total_cnt(UMP_TYPE) - sec_meminfo_get_alloc_low_cnt(UMP_TYPE))*4)
 	#endif
 		);
