@@ -600,15 +600,8 @@ static void exynos4_handler_tmu_state(struct work_struct *work)
 			}
 			pr_debug("check_handle = %d\n", check_handle);
 			notify_change_of_tmu_state(info);
-			pr_info("normal: free cpufreq_limit & interrupt enable.\n");
+			pr_info("normal: free cpufreq_limit\n");
 
-			/* clear to prevent from interfupt by peindig bit */
-			__raw_writel(INTCLEARALL,
-				info->tmu_base + EXYNOS4_TMU_INTCLEAR);
-			exynos_interrupt_enable(info, 1);
-			enable_irq(info->irq);
-			mutex_unlock(&tmu_lock);
-			return;
 		}
 		break;
 
