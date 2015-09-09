@@ -599,8 +599,8 @@ static void exynos4_handler_tmu_state(struct work_struct *work)
 				check_handle &= ~(THROTTLE_FLAG);
 			}
 			pr_debug("check_handle = %d\n", check_handle);
-			notify_change_of_tmu_state(info);
-			pr_info("normal: free cpufreq_limit\n");
+		//	notify_change_of_tmu_state(info);
+		//	pr_info("normal: free cpufreq_limit\n");
 
 		}
 		break;
