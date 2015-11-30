@@ -216,7 +216,7 @@ int mali_gpu_vol = 1025000;
 /* Orion */
 static const mali_bool bis_vpll = MALI_FALSE;
 int mali_gpu_clk = 267;
-int mali_gpu_vol = 1050000;
+int mali_gpu_vol = 1000000;
 #endif
 
 static unsigned int GPU_MHZ	= 1000000;
@@ -579,7 +579,7 @@ static mali_bool set_mali_dvfs_status(u32 step,mali_bool boostup)
 #endif
 
 #ifdef EXYNOS4_ASV_ENABLED
-	if (samsung_rev() < EXYNOS4412_REV_2_0) {
+	if (samsung_rev() < EXYNOS4412_REV_2_0 && !soc_is_exynos4210()) { 
 		if (mali_dvfs[step].clock == 160)
 			exynos4x12_set_abb_member(ABB_G3D, ABB_MODE_100V);
 		else
@@ -964,7 +964,7 @@ static mali_bool init_mali_clock(void)
 	mali_regulator_set_voltage(mali_gpu_vol, mali_gpu_vol);
 
 #ifdef EXYNOS4_ASV_ENABLED
-	if (samsung_rev() < EXYNOS4412_REV_2_0) {
+	if (samsung_rev() < EXYNOS4412_REV_2_0 && !soc_is_exynos4210()) { 
 		if (mali_gpu_clk == 160)
 			exynos4x12_set_abb_member(ABB_G3D, ABB_MODE_100V);
 		else
@@ -1033,7 +1033,7 @@ static _mali_osk_errcode_t enable_mali_clocks(void)
 		mali_regulator_set_voltage(mali_runtime_resume.vol, mali_runtime_resume.vol);
 
 #ifdef EXYNOS4_ASV_ENABLED
-		if (samsung_rev() < EXYNOS4412_REV_2_0) {
+	if (samsung_rev() < EXYNOS4412_REV_2_0 && !soc_is_exynos4210()) { 
 			if (mali_runtime_resume.clk == 160)
 				exynos4x12_set_abb_member(ABB_G3D, ABB_MODE_100V);
 			else
