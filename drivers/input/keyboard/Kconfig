@@ -565,6 +565,4 @@ config KEYBOARD_W90P910
 
 source "drivers/input/keyboard/cypress/Kconfig"
 
-source "drivers/input/keyboard/cypressbln/Kconfig"
-
 endif
