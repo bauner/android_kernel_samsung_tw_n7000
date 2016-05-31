@@ -64,6 +64,16 @@ config IOSCHED_SIO
 		Sio is a mix between noop & deadline.
 		No reordering or sorting of requests
 
+config IOSCHED_SIOPLUS
+        tristate "Simple I/O scheduler plus"
+        default y
+        ---help---
+		Based on the original SIO scheduler with improvements.
+		Functionality for specifying the starvation 
+		of async reads against sync reads;
+		starved write requests counter only counts when
+		there actually are write requests in the queue
+
 choice
 	prompt "Default I/O scheduler"
 	default DEFAULT_ROW
@@ -83,6 +93,9 @@ choice
     config DEFAULT_SIO
         bool "SIO" if IOSCHED_SIO=y
 
+    config DEFAULT_SIOPLUS
+        bool "SIOPLUS" if IOSCHED_SIOPLUS=y
+
 	config DEFAULT_NOOP
 		bool "No-op"
 
@@ -94,6 +107,7 @@ config DEFAULT_IOSCHED
 	default "cfq" if DEFAULT_CFQ
 	default "row" if DEFAULT_ROW
 	default "sio" if DEFAULT_SIO
+	default "sioplus" if DEFAULT_SIOPLUS
 	default "noop" if DEFAULT_NOOP
 
 endmenu
