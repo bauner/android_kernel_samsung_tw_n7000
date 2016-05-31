@@ -54,6 +54,16 @@ config IOSCHED_ROW
 	  according to queue priority.
 	  Most suitable for mobile devices.
 
+config IOSCHED_SIO
+        tristate "Simple I/O scheduler"
+        default y
+        ---help---
+		Simple I/O scheduler aims to keep minimum overhead
+		to achieve low latency to serve I/O requests.
+		No priority quesues concepts, but only basic merging.
+		Sio is a mix between noop & deadline.
+		No reordering or sorting of requests
+
 choice
 	prompt "Default I/O scheduler"
 	default DEFAULT_ROW
@@ -70,6 +80,9 @@ choice
 	config DEFAULT_ROW
 		bool "ROW" if IOSCHED_ROW=y
 
+    config DEFAULT_SIO
+        bool "SIO" if IOSCHED_SIO=y
+
 	config DEFAULT_NOOP
 		bool "No-op"
 
@@ -80,6 +93,7 @@ config DEFAULT_IOSCHED
 	default "deadline" if DEFAULT_DEADLINE
 	default "cfq" if DEFAULT_CFQ
 	default "row" if DEFAULT_ROW
+	default "sio" if DEFAULT_SIO
 	default "noop" if DEFAULT_NOOP
 
 endmenu
