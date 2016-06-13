@@ -38,7 +38,7 @@
 #include <linux/workqueue.h>
 
 #ifdef CONFIG_CPU_EXYNOS4210
-#define MALI_DVFS_STEPS 2
+#define MALI_DVFS_STEPS 3
 #define MALI_DVFS_WATING 10 /* msec */
 #define MALI_DVFS_DEFAULT_STEP 0
 #else
@@ -90,7 +90,7 @@ typedef struct mali_runtime_resumeTag{
 #if defined(CONFIG_CPU_EXYNOS4212) || defined(CONFIG_CPU_EXYNOS4412)
 mali_runtime_resume_table mali_runtime_resume = {266, 900000, 1};
 #else
-mali_runtime_resume_table mali_runtime_resume = {267, 1000000, 1};
+mali_runtime_resume_table mali_runtime_resume = {160, 950000, 0};
 #endif
 
 /* dvfs table */
@@ -102,8 +102,9 @@ mali_dvfs_table mali_dvfs[MALI_DVFS_STEPS]={
 			/* step 3 */{440  ,1000000	,1025000   ,85   , 90},
 			/* step 4 */{533  ,1000000	,1075000   ,95   ,100} };
 #else
-			/* step 0 */{134  ,1000000	, 950000   ,85   , 90},
-			/* step 1 */{267  ,1000000	,1000000   ,85   ,100} };
+			/* step 0 */{160  ,1000000	, 950000   ,0    , 85},
+			/* step 1 */{200  ,1000000	, 975000   ,75   , 90},
+			/* step 2 */{267  ,1000000	,1000000   ,75   ,100} };
 #endif
 
 #ifdef EXYNOS4_ASV_ENABLED
@@ -170,16 +171,22 @@ static unsigned int asv_3d_volt_4212_9_table[MALI_DVFS_STEPS][ASV_LEVEL_PD] = {
 #else
 
 static unsigned int asv_3d_volt_4210_12_table[MALI_DVFS_STEPS][ASV_LEVEL_4210_12] = {
-	{  1000000,  1000000,  1000000,   950000,   950000,   950000,   950000,   950000},	/* L1(134Mhz) */
+	{  1000000,  1000000,  1000000,   950000,   950000,   950000,   950000,   950000},	/* L2(160Mhz) */
 #if (MALI_DVFS_STEPS > 1)
-	{  1100000,  1100000,  1100000,  1000000,  1000000,  1000000,  1000000,   950000},	/* L0(266Mhz) */
+	{  1050000,  1050000,  1050000,   975000,   975000,   975000,   975000,   950000},	/* L1(200Mhz) */
+#if (MALI_DVFS_STEPS > 2)
+	{  1100000,  1100000,  1100000,  1000000,  1000000,  1000000,  1000000,   950000},	/* L0(267Mhz) */
+#endif
 #endif
 };
 
 static unsigned int asv_3d_volt_4210_14_table[MALI_DVFS_STEPS][ASV_LEVEL_4210_14] = {
-	{  1000000,  1000000,   950000,   950000,   950000},	/* L1(134Mhz) */
+	{  1000000,  1000000,   950000,   950000,   950000},	/* L2(160Mhz) */
 #if (MALI_DVFS_STEPS > 1)
-	{  1100000,  1100000,  1000000,  1000000,   950000},	/* L0(266Mhz) */
+	{  1050000,  1050000,   975000,   975000,   950000},	/* L1(200Mhz) */
+#if (MALI_DVFS_STEPS > 2)
+	{  1100000,  1100000,  1000000,  1000000,   950000},	/* L0(267Mhz) */
+#endif
 #endif
 };
 #endif
