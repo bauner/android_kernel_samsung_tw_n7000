@@ -154,17 +154,6 @@ struct mfc_inst_ctx {
 #ifdef SYSMMU_MFC_ON
 	unsigned long pgd;
 #endif
-#if defined(CONFIG_BUSFREQ)
-	int busfreq_flag;		/* context bus frequency flag */
-#endif
-
-#if defined(CONFIG_MACH_GC1) && defined(CONFIG_EXYNOS4_CPUFREQ)
-	int cpufreq_flag; /* context CPU frequency flag*/
-#endif
-
-#if defined(CONFIG_CPU_EXYNOS4210) && defined(CONFIG_EXYNOS4_CPUFREQ)
-	int cpufreq_flag; /* context CPU frequency flag*/
-#endif
 
 #ifdef CONFIG_EXYNOS_CONTENT_PATH_PROTECTION
 	int drm_flag;
