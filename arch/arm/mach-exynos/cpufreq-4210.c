@@ -24,7 +24,7 @@
 
 #include <plat/clock.h>
 
-#define CPUFREQ_LEVEL_END	L14
+#define CPUFREQ_LEVEL_END	L13
 
 static int max_support_idx;
 static int min_support_idx = (CPUFREQ_LEVEL_END - 1);
@@ -54,7 +54,6 @@ static struct cpufreq_frequency_table exynos4210_freq_table[] = {
 	{L10, 400 * 1000},
 	{L11, 300 * 1000},
 	{L12, 200 * 1000},
-	{L13, 100 * 1000},
 	{0, CPUFREQ_TABLE_END},
 };
 
@@ -72,7 +71,6 @@ static struct cpufreq_clkdiv exynos4210_clkdiv_table[] = {
 	{L10, 0},
 	{L11, 0},
 	{L12, 0},
-	{L13, 0},
 };
 
 static unsigned int clkdiv_cpu0[CPUFREQ_LEVEL_END][7] = {
@@ -94,7 +92,6 @@ static unsigned int clkdiv_cpu0[CPUFREQ_LEVEL_END][7] = {
 	{ 0, 3, 7, 3, 3, 1, 7 },  /* ARM L10: 400MHz */
 	{ 0, 3, 7, 3, 3, 1, 7 },  /* ARM L11: 300MHz */
 	{ 0, 1, 3, 1, 3, 1, 7 },  /* ARM L12: 200MHz */
-	{ 0, 1, 3, 1, 3, 1, 7 },  /* ARM L13: 100MHz */
 };
 
 static unsigned int clkdiv_cpu1[CPUFREQ_LEVEL_END][2] = {
@@ -114,7 +111,6 @@ static unsigned int clkdiv_cpu1[CPUFREQ_LEVEL_END][2] = {
 	{ 3, 0 },	/* ARM L10: 400MHz */
 	{ 3, 0 },	/* ARM L11: 300MHz */
 	{ 3, 0 },	/* ARM L12: 200MHz */
-	{ 3, 0 },	/* ARM L13: 100MHz */
 };
 
 static unsigned int exynos4_apll_pms_table[CPUFREQ_LEVEL_END] = {
@@ -131,7 +127,6 @@ static unsigned int exynos4_apll_pms_table[CPUFREQ_LEVEL_END] = {
 	((200 << 16)|(6 << 8)|(0x2)),	/* APLL FOUT L10: 400MHz */
 	((300 << 16)|(6 << 8)|(0x3)),	/* APLL FOUT L11: 300MHz */
 	((200 << 16)|(6 << 8)|(0x3)),	/* APLL FOUT L12: 200MHz */
-	((200 << 16)|(6 << 8)|(0x4)),	/* APLL FOUT L13: 100MHz */
 };
 
 /*
@@ -156,7 +151,6 @@ static const unsigned int asv_voltage_A[CPUFREQ_LEVEL_END][8] = {
 	{ 1075000,  975000, 1000000,  975000,  975000,  950000,  925000,  925000 }, /*  400MHz */
 	{ 1075000,  975000, 1000000,  975000,  975000,  950000,  925000,  925000 }, /*  300MHz */
 	{ 1050000,  950000,  975000,  950000,  950000,  925000,  925000,  925000 }, /*  200MHz */
-	{ 1050000,  950000,  975000,  950000,  950000,  925000,  925000,  925000 }, /*  100MHz */
 };
 
 static const unsigned int asv_voltage_B[CPUFREQ_LEVEL_END][5] = {
@@ -177,7 +171,6 @@ static const unsigned int asv_voltage_B[CPUFREQ_LEVEL_END][5] = {
 	{ 1050000, 1000000,  950000,  950000,  950000 }, // 400MHz
 	{ 1025000,  975000,  950000,  950000,  950000 }, // 300MHz
 	{ 1025000,  975000,  950000,  950000,  950000 }, // 200MHz
-	{ 1025000,  975000,  950000,  950000,  950000 }, // 100MHz
 };
 
 static void set_clkdiv(unsigned int div_index)
